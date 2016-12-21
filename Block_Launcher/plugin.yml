@@ -1,0 +1,8 @@
+name: Hub
+main: me.virusbrandon.Block_Launcher.Main
+author: virusbrandon
+version: 1.65
+commands:
+  Gadgets:
+    description: Gadgets Base Command
+    usage: /Gadgets <Gadget # (1 to 4)>

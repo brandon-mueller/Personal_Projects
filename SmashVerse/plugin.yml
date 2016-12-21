@@ -1,0 +1,10 @@
+name: SmashVerse
+main: me.virusbrandon.smashverse.Main
+author: virusbrandon
+version: 1.02
+commands:
+  SV:
+    description: Super SmashVerse Commands
+    usage: /SV <Args>
+
+depend: [HologramAPI,GlowAPI]

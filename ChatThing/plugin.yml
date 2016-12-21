@@ -1,0 +1,5 @@
+name: ChatThing
+main: me.virusbrandon.chatthing.Main
+author: Virusbrandon
+version: 1.0
+commands:

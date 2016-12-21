@@ -1,0 +1,10 @@
+name: MeteorShower
+main: me.virusbrandon.meteorshower.Main
+author: virusbrandon
+version: 1.00
+commands:
+  MS:
+    description: Summon Meteor Shower!
+    usage: /MS
+
+depend: [HologramAPI]

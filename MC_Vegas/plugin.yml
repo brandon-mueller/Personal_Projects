@@ -1,0 +1,11 @@
+name: MC_Vegas
+main: me.virusbrandon.MC_Vegas.Main
+author: virusbrandon
+version: 2.82
+commands:
+  Profile:
+    description: User Profile Operations
+    usage: /Profile <args>
+  Slots:
+    description: Slot Machine Gadget
+    usage: /Slots <Stuff>

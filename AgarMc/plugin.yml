@@ -1,0 +1,12 @@
+name: AgarMC
+main: me.virusbrandon.agarmc.Main
+author: Virusbrandon
+version: 1.1
+commands:
+   AgarMc:
+      description: Play A Friendly Game Of Agar.io In Minecraft!
+      usage: /AgarMC Join 
+   Leave:
+      description: Leave The Agar.MC GameBoard - Only Works In Game
+      usage: /Leave
+softdepend: [Multiverse-Core, CleanrommGenerator]

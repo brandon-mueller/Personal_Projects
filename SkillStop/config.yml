@@ -1,0 +1,7 @@
+CurrentJackpot: 0.0
+DefaultJackpot: 50.0
+PricePerPlay: 1.0
+PercentOfPriceToPot: 0.5
+PlaysRequiredForWin: 10
+DefaultPlaysNeededForWin: 10
+TimeLimit: 30

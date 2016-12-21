@@ -1,0 +1,8 @@
+name: BossCompass
+main: me.virusbrandon.bosscompass.Main
+author: Virusbrandon
+version: 1.12
+commands:
+  Compass:
+    description: Change Your Command Mode Between Compass And Clock Mode!
+    usage: /Compass

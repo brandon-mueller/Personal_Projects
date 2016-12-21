@@ -1,0 +1,8 @@
+name: Tags
+main: me.virusbrandon.tags.Main
+author: virusbrandon
+version: 4.32.61815.0
+commands:
+  Tags:
+    description: Prefix Commands
+    usage: /Tags

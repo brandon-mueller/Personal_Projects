@@ -1,0 +1,8 @@
+name: Micro-SG
+main: me.virusbrandon.Micro_SG.Main
+author: virusbrandon
+version: 8.14.40316.0
+commands:
+  SG:
+    description: SG Base Command!
+    usage: /SG <ARGS>

@@ -1,0 +1,8 @@
+name: PowerBlock
+main: me.virusbrandon.powerblock.Main
+author: virusbrandon
+version: 2.09.112015
+commands:
+  Bank:
+    description: Not Depending On A Public Economy Plugin >:)
+    usage: /Bank <Sub-Command> <Args>

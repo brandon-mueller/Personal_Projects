@@ -1,0 +1,10 @@
+name: TransportPLUS
+main: me.virusbrandon.transportPLUS.Main
+author: virusbrandon
+version: 1.01
+commands:
+  TSP:
+    description: Transport PLUS Commands
+    usage: /tsp <ARGS>
+
+depend: [HologramAPI]

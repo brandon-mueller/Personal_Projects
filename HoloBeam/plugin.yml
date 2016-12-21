@@ -1,0 +1,14 @@
+name: HoloBeam
+main: me.virusbrandon.HoloBeam.Main
+author: virusbrandon
+version: 1.18
+commands:
+  Beam:
+    description: Gives You A HoloBeam Rifle!
+    usage: /Beam - Simple As That!
+
+  B:
+    description: Gives You A HoloBeam Rifle
+    usage: /B - Simple As That!
+
+depend: [HologramAPI,WorldEdit,WorldGuard]

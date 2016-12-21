@@ -1,0 +1,11 @@
+name: BottomLessChests
+main: me.virusbrandon.bottomlesschests.Main
+author: Virusbrandon
+version: 1400.1.9
+commands:
+  Chest:
+    description: A Chest With Ample Space!
+    usage: /Chest <Sub Command> <Args>
+  BChest:
+    description: A Chest With Ample Space!
+    usage: /Bchest <Sub Command> <Args>

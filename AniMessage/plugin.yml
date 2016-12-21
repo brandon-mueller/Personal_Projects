@@ -1,0 +1,17 @@
+name: AniMessage
+main: me.virusbrandon.AniMessage.AniMessage
+author: virusbrandon
+version: 2.55
+commands:
+   Message:
+      description: Scrolling Signs!
+      usage: /Message params...
+   Frame:
+      description: Signs, One Frame At A Time!
+      usage: /Frame params...
+   Pkr:
+      description: Snake Parkour!
+      usage: /Pkr params...
+   Burst:
+      description: Fountains!
+      usage: /Burst params...

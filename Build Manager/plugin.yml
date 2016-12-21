@@ -1,0 +1,8 @@
+name: BuildManager
+main: me.virusbrandon.BuildManager.BuildManager
+author: virusbrandon
+version: 1.0
+commands:
+   BuildArea:
+      description: Save, Construct, Clear, Copy, and Move Builds
+      usage: /BuildArea

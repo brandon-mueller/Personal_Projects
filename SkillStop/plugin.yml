@@ -1,0 +1,10 @@
+name: SkillStop
+main: me.virusbrandon.skillstop.Main
+author: virusbrandon
+version: 1.03
+commands:
+  Skill:
+    description: Play SkillStop
+    usage: /Skill
+
+depend: [Vault]
