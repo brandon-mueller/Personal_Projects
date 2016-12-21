@@ -13,7 +13,7 @@ public class HUD {
 	 * Open HUD Delay (~.5 Sec)
 	 * 
 	 */
-	Runnable CREATE_LOBBY_WORLD_ROUTINE = new Runnable() { 
+	Runnable timer = new Runnable() { 
 		public void run() {
 			del--;
 			ArmorStand as = stands.get(del);
@@ -172,7 +172,7 @@ public class HUD {
 		double dist = 100;
 		int index = 0;
 		for(int x=0;x<yaws.size();x++){
-			double c = Math.abs(yaws.get(x)-YAW);
+			double c = Math.abs(yaws.get(x)-((YAW<-180)?YAW+360:YAW));
 			if(c<dist){
 				dist = c;
 				index = x;
@@ -198,7 +198,7 @@ public class HUD {
 	 */
 	private void start(int delay){
 		inProg = true;
-		id = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getPlugin(Main.class), CREATE_LOBBY_WORLD_ROUTINE, delay, delay);
+		id = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getPlugin(Main.class), timer, delay, delay);
 	}
 
 	/**
