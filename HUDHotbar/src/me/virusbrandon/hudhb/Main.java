@@ -4,10 +4,14 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener{
@@ -50,7 +54,16 @@ public class Main extends JavaPlugin implements Listener{
 			if(!p.isSneaking()){
 				cur.open(p.getLocation().getDirection());
 			} else {
-				p.getInventory().setHeldItemSlot(cur.close());
+				int slot = cur.close();
+				PlayerInventory inv = p.getInventory();
+				if(slot > 8){
+					ItemStack hb = inv.getItem(inv.getHeldItemSlot());
+					ItemStack st = inv.getItem(slot);
+					inv.setItem(slot, hb);
+					inv.setItem(inv.getHeldItemSlot(), st);
+				} else {
+					p.getInventory().setHeldItemSlot(slot);
+				}
 			}
 		}catch(Exception e1){}
 	}
@@ -59,7 +72,7 @@ public class Main extends JavaPlugin implements Listener{
 	public void asm(PlayerArmorStandManipulateEvent e){
 		try{
 			int i = Integer.parseInt(e.getRightClicked().getCustomName());
-			if((i>=0)|(i<9)){
+			if((i>=0)&(i<36)){
 				e.setCancelled(true);
 			}
 		}catch(Exception e1){}
@@ -119,6 +132,30 @@ public class Main extends JavaPlugin implements Listener{
 			h.close();
 		}
 		HUDS.clear();
+	}
+	
+	/**
+	 * Commands
+	 * 
+	 */
+	public boolean onCommand(CommandSender se, Command c, String lbl, String[] args){
+		if(se instanceof Player){
+			Player p = ((Player)se);
+			UUID u = p.getUniqueId();
+			if(lbl.equalsIgnoreCase("HUD")){
+				if(args[0].equalsIgnoreCase("Toggle")){
+					if(!HUDS.containsKey(u)){
+						HUDS.put(u, new HUD(p,this));
+					}
+					HUDS.get(u).toggleHud();
+				}
+			}
+
+		} else {
+			se.sendMessage("HUD Command Must Be Issues By An In Game Player.");
+		}
+		
+		return true;
 	}
 	
 	/**

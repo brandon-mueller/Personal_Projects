@@ -1,6 +1,7 @@
 package me.virusbrandon.hudhb;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -10,12 +11,17 @@ import org.bukkit.util.*;
 public class HUD {
 
 	/**
-	 * Open HUD Delay (~.5 Sec)
+	 * Open HUD Delay (.45 Sec)
 	 * 
 	 */
 	Runnable timer = new Runnable() { 
 		public void run() {
 			del--;
+			for(int x=0;x<4;x++){
+				ArmorStand as = stands.get(del+(9*x));
+				Location l = as.getLocation();
+				as.teleport(new Location(l.getWorld(),l.getX(),l.getY()+.1,l.getZ()));
+			}
 			ArmorStand as = stands.get(del);
 			Location l = as.getLocation();
 			as.teleport(new Location(l.getWorld(),l.getX(),l.getY()+.1,l.getZ()));
@@ -37,6 +43,8 @@ public class HUD {
 	private Main main;
 	private ArrayList<ArmorStand> stands = new ArrayList<>();
 	private ArrayList<Double> yaws = new ArrayList<>();
+	private HashMap<Integer,Double> pitches = new HashMap<>();
+	private int[] keys = new int[]{0,1,2,3};
 	private boolean open = false;
 	private int indexUp = -1;
 	private double defY, selY;
@@ -45,6 +53,7 @@ public class HUD {
 	private int id;
 	private int del = 9;
 	private boolean inProg = false;
+	private boolean userEnabled = true;
 	
 	public HUD(Player mine, Main main){
 		this.mine = mine;
@@ -59,24 +68,28 @@ public class HUD {
 	 */
 	@SuppressWarnings("deprecation")
 	public void open(Vector v){
+		if(!userEnabled){main.getBar().sendActionBar(mine, "HUD DISABLED By User. Run /HUD Toggle To Enable Interface.");return;}
 		if(!isOpen() & !inProg){
 			Location l = mine.getLocation();
 			Location stl = new Location(l.getWorld(),l.getX()+(v.getX()*1.5),l.getY()+v.getY(),l.getZ()+(v.getZ()*1.5));
 			Vector res = calcDir((l.getYaw()+90)%360);
-			for(int x=adj;x<adj+9;x++){
-				Location ll = new Location(l.getWorld(),stl.getX()+(res.getX()*(x*spc)),stl.getY()+.5,stl.getZ()+(res.getZ()*(x*spc)));
-				ArmorStand st =ll.getWorld().spawn(ll, ArmorStand.class);
-				st.setVisible(false);
-				st.setInvulnerable(true);
-				st.setSmall(true);
-				st.setGravity(false);
+			int tr = (adj-1);
+			int row = 4;
+			for(int x=adj;x<(36+adj);x++){
+				tr++;
+				if(tr >= (9+adj)){
+					tr = adj;
+					row--;
+				}
+				Location ll = new Location(l.getWorld(),stl.getX()+(res.getX()*(tr*spc)),(stl.getY()+.5)+((x>=5)?(row*.5):0),stl.getZ()+(res.getZ()*(tr*spc)));
 				ItemStack stt = mine.getInventory().getItem(x+Math.abs(adj));
-				st.setItemInHand(stt==null?new ItemStack(Material.STAINED_GLASS_PANE,1,DyeColor.RED.getWoolData()):stt);
-				st.setRightArmPose(new EulerAngle(Math.toRadians(l.getPitch()-90),Math.toRadians(l.getYaw()-180),0));
-				st.setCustomName((x+Math.abs(adj))+"");
-				stands.add(st);
+				stands.add(new EncapArmorStand(ll.getWorld().spawn(ll, ArmorStand.class)).setVisible(false).setInvulnerable(true).setSmall(true).setGravity(false).setCollidable(false).setItemInHand(stt==null?new ItemStack(Material.STAINED_GLASS_PANE,1,DyeColor.YELLOW.getWoolData()):stt).setRightArmPose(new EulerAngle(Math.toRadians(l.getPitch()-90),Math.toRadians(l.getYaw()-180),0)).setCustomName((x+Math.abs(adj))+"").getResultingArmorStand());
 				Location temp = stands.get(x+Math.abs(adj)).getLocation();
-				yaws.add((double)-180+temp.setDirection(calcDir(mine.getLocation(),temp)).getYaw());	
+				Location t = temp.setDirection(calcDir(mine.getLocation(),temp));
+				yaws.add((double)-180+t.getYaw());
+				if((x+Math.abs(adj))%9==0){
+					pitches.put(keys[pitches.size()],(double)t.getPitch());
+				}
 			}	
 			defY = stands.get(0).getLocation().getY();
 			selY = stands.get(0).getLocation().getY()+.5;
@@ -99,6 +112,7 @@ public class HUD {
 			}
 			stands.clear();
 			yaws.clear();
+			pitches.clear();
 			setOpen(false);
 			inProg = false;
 			del = 9;
@@ -145,8 +159,17 @@ public class HUD {
 	 * 
 	 */
 	public Vector calcDir(Location source, Location target){
-		double rad = (Math.toRadians(Math.toDegrees(Math.atan2((source.getZ() - target.getZ()), (source.getX() - target.getX())))+90));
-		return new Vector(-Math.sin(rad), 0, Math.cos(rad));
+		double dX = source.getX() - target.getX();
+		double dY = source.getY() - target.getY();
+		double dZ = source.getZ() - target.getZ();
+		double yaw = Math.atan2(dZ, dX);
+		double pitch = Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + Math.PI;
+		double X = Math.sin(pitch) * Math.cos(yaw);
+		double Y = Math.sin(pitch) * Math.sin(yaw);
+		double Z = Math.cos(pitch);
+		return new Vector(X, Z, Y);
+		//double rad = (Math.toRadians(Math.toDegrees(Math.atan2((source.getZ() - target.getZ()), (source.getX() - target.getX())))+90));
+		//return new Vector(-Math.sin(rad),0, Math.cos(rad));
 	}
 	
 	/**
@@ -155,11 +178,18 @@ public class HUD {
 	 * @param index
 	 */
 	public void select(int index){
+		int re = 0;
+		int row = 4;
 		for(int x=0;x<stands.size();x++){
 			ArmorStand cur = stands.get(x);
 			Location ll = cur.getLocation();
-			if(cur.teleport(((x != index)?new Location(ll.getWorld(),ll.getX(),defY,ll.getZ()):new Location(ll.getWorld(),ll.getX(),selY,ll.getZ())))){/* BH */}
+			if(cur.teleport(((x != index)?new Location(ll.getWorld(),ll.getX(),defY+((x>8)?(row*.5):0),ll.getZ()):new Location(ll.getWorld(),ll.getX(),selY+((x>8)?(row*.5):0),ll.getZ())))){/* BH */}
 			this.indexUp = index;
+			re++;
+			if(re>=9){
+				re=0;
+				row--;
+			}
 		}
 	}
 	
@@ -178,7 +208,16 @@ public class HUD {
 				index = x;
 			}
 		}
-		return index;
+		dist = 100;
+		int row = 0;
+		for(int x=0;x<4;x++){
+			double dd = Math.abs(mine.getLocation().getPitch()-pitches.get(x));
+			if(dd < dist){
+				dist = dd;
+				row = x;
+			}
+		}
+		return ((row*9)+index);
 	}
 	
 	/**
@@ -187,6 +226,15 @@ public class HUD {
 	 */
 	public void setDefY(double d){
 		this.defY = d;
+	}
+	
+	/**
+	 * Toggles The Hud
+	 * 
+	 */
+	public void toggleHud(){
+		this.userEnabled = ((userEnabled)?false:true);
+		main.getBar().sendActionBar(mine, (userEnabled)?"HUD Enabled!":"HUD Disabled!");
 	}
 	
 	/**

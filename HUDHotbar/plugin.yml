@@ -1,4 +1,8 @@
-name: HudHotbar
+name: HudInventory
 main: me.virusbrandon.hudhb.Main
 author: virusbrandon
-version: 1.2
+version: 1.0
+commands:
+  HUD:
+    description: Inventory Heads Up Display Command
+    usage: /Hud Toggle
